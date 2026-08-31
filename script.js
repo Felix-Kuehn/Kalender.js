@@ -2,22 +2,33 @@
 const date = new Date(); /* constructor, with 'new' we can create many objects out of Date() with the const date */
 
 const day = date.getDate();
-const month = date.getMonth() + 1; /* +1 because it counts from 0 onward. So january is 0 */
+const month = date.getMonth(); /* +1 because it counts from 0 onward. So january is 0 */
 const year = date.getFullYear();
 const weekDay = date.getDay();
-const fullDate = date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear();
-let wochentag = ("")
-let monat =("")
+const fullDate = date.getDate() + "." + (date.getMonth() +1) + "." + date.getFullYear();
+const jahresanfang = new Date(year, 0, 1);
+const tagesNummer =
+    Math.floor((date - jahresanfang) / (1000 * 60 * 60 * 24)) + 1; /* Math.floor rounds down from a decimal. +1 because it counts the difference between january 1st and august 31th, but january 1st counts itself. The math converts the difference, which is given in milliseconds, into days. */
+const jahresende = new Date(year +1, 0, 1); /*We create January 1 of the next year so that the difference represents the days remaining from today until the beginning of the next year.  */
+const tageUebrig =
+    Math.floor((jahresende - date) / (1000 * 60 * 60 * 24));
+const wochentgz = Math.ceil(day/7);
+const daysInMonth =
+    (new Date(year,month+1,1) - new Date(year,month,1)) / (1000 * 60 * 60 * 24);
 
-console.log(date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear()); /* +1 here because, getMonth counts from 0 onwards, so 0 is January and Dezember is 11 */
+console.log(tagesNummer);
+console.log(tageUebrig);
+console.log(date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear() + " " + date.getHours() + ":" + String(date.getMinutes()).padStart(2, "0")); /* +1 here because, getMonth counts from 0 onwards, so 0 is January and Dezember is 11. padStart(2, "0") fills the string with 0 from the left until 2 characters are filled, so the time isn´t shown as 13.5 but 13.05. or 13.00*/
 console.log(day);
-console.log(month);
+console.log(month); /* Month output "incorrectly" because +1 is not needed with array. So technically right */
 console.log(year);
 console.log(weekDay);
+console.log(wochentgz);
+console.log(daysInMonth);
 
 
-switch (weekDay) {
-    case 0:
+ /*switch (weekDay) {              /* Alternatively, could use an array at defining. wochentag = ['Sonntag','Montag','Dienstag' etc.]*/
+    /*case 0:
         wochentag = "Sonntag";
         break;
     case 1:
@@ -38,10 +49,35 @@ switch (weekDay) {
     case 6:
         wochentag = "Samstag";
         break;
-}
+}*/
+
+const wochentage = [                /* Did use an array now, more compact an easier once understood. */
+    "Sonntag",
+    "Montag",
+    "Dienstag",
+    "Mittwoch",
+    "Donnerstag"
+    ,"Freitag",
+    "Samstag" 
+];
+
+const wochentag = wochentage[weekDay];
+
 console.log(wochentag);
 
-switch (month) {
+const daycounter = [
+    "erste",
+    "zweite",
+    "dritte",
+    "vierte",
+    "fünfte"
+];
+
+const daycount = daycounter[wochentgz - 1];
+
+console.log(daycount)
+
+/*switch (month) {
     case 1:
         monat = "Januar";
         break;
@@ -78,9 +114,27 @@ switch (month) {
     case 12:
         monat = "Dezember";
         break;
-}
+} */
+
+const monate = [
+    "Januar",
+    "Februar",
+    "März",
+    "April",
+    "Mai",
+    "Juni",
+    "Juli",
+    "August",
+    "September",
+    "Oktober",
+    "November",
+    "Dezember"
+];
+
+const monat = monate[month];
+
 document.getElementById("ueberschrift").textContent =
 `Kalenderblatt vom ${fullDate}.`;
 
 document.getElementById("beschreibung").textContent = /* document means it accesses my html elements -> p or h1. .getElementbyId(), is self explanatory, its a method of document. .textContent hints towards the content of the html element.  */
-`Der ${day}.${monat} ${year} ist ein ${wochentag} und zwar der zweite Freitag im Monat Juni des Jahres 2025. Es handelt sich um den 164. Tag des Jahres, was bedeutet,dass es noch 201 Tage bis zum Jahresende sind. Der Monat Juni hat insgesamt 30 Tage. Heute ist kein gesetzlicher Feiertag in Deutschland.`;
+`Der ${day}.${monat} ${year} ist ein ${wochentag} und zwar der ${daycount} ${wochentag} im Monat ${monat} des Jahres ${year}. Es handelt sich um den ${tagesNummer}. Tag des Jahres, was bedeutet,dass es noch ${tageUebrig} Tage bis zum Jahresende sind. Der Monat ${monat} hat insgesamt ${daysInMonth} Tage. Heute ist kein gesetzlicher Feiertag in Deutschland.`;
