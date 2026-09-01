@@ -138,3 +138,49 @@ document.getElementById("ueberschrift").textContent =
 
 document.getElementById("beschreibung").textContent = /* document means it accesses my html elements -> p or h1. .getElementbyId(), is self explanatory, its a method of document. .textContent hints towards the content of the html element.  */
 `Der ${day}.${monat} ${year} ist ein ${wochentag} und zwar der ${daycount} ${wochentag} im Monat ${monat} des Jahres ${year}. Es handelt sich um den ${tagesNummer}. Tag des Jahres, was bedeutet,dass es noch ${tageUebrig} Tage bis zum Jahresende sind. Der Monat ${monat} hat insgesamt ${daysInMonth} Tage. Heute ist kein gesetzlicher Feiertag in Deutschland.`;
+
+const tabelle = document.getElementById("tabelle");
+
+const caption = tabelle.createCaption();
+caption.textContent = `${monat} ${year}`;
+
+const kopfzeile = tabelle.insertRow();
+
+const wtage = [
+    "Mo","Di","Mi","Do","Fr","Sa","So"
+];
+
+for (let i=0; i< 7; i++) {
+    const zelle = kopfzeile.insertCell();
+    zelle.textContent = wtage[i];
+};
+
+const ersterTag = new Date(year, month, 1);
+let startTag = ersterTag.getDay();
+
+console.log(startTag);
+
+if (startTag === 0) {
+    startTag = 7;
+}
+
+let reihe = tabelle.insertRow();
+
+for (let i = 1; i < startTag; i++) {
+    const zelle = reihe.insertCell();
+    zelle.textContent = "";
+}
+
+for (let tag = 1; tag <= daysInMonth; tag++) {
+
+    if (reihe.cells.length === 7) {
+        reihe = tabelle.insertRow();
+    }
+
+    const zelle = reihe.insertCell();
+    zelle.textContent = tag;
+}
+while (reihe.cells.length < 7) {
+    const zelle = reihe.insertCell();
+    zelle.textContent = "";
+}

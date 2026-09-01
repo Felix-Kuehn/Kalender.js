@@ -47,7 +47,7 @@ h1:hover{
 }
 
 tr:nth-child(2) td:nth-child(-n+5) {
-    color: rgba(0, 0, 0, 0.4) /* color grba, 0.4 means opacity at 40%. Changing Opacity itself affects the borders aswell, so this method was better */
+    color: rgba(0, 0, 0, ) /* color grba, 0.4 means opacity at 40%. Changing Opacity itself affects the borders aswell, so this method was better */
 }
 
 tr:nth-child(7) td:nth-child(n+2) {
@@ -59,6 +59,9 @@ table {
     border: 5px solid black;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     font-size: 140%;
+    table-layout: fixed;
+    width: 25em;
+    height: 20em;
 }
 
 th, td {
@@ -96,7 +99,10 @@ td:nth-child(6) {                           /* every 6th cell in the table is co
 td:nth-child(7) {
     background-color: rgb(250, 94, 94);
 }
-.fussnote {
-    font-size: 70%;
-    text-align: left;
+
+caption {
+    background-color: #ddd;
+    outline: 4px solid black;
+    margin-left: 4px;
+    margin-right: 4px;
 }
