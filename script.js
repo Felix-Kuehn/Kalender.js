@@ -159,6 +159,7 @@ const ersterTag = new Date(year, month, 1);
 let startTag = ersterTag.getDay();
 
 console.log(startTag);
+console.log(ersterTag);
 
 if (startTag === 0) {
     startTag = 7;
