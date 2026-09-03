@@ -1,4 +1,5 @@
 'use strict'
+
 const date = new Date(); /* constructor, with 'new' we can create many objects out of Date() with the const date */
 
 const day = date.getDate();
