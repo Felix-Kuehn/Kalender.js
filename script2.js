@@ -5,6 +5,7 @@ const day = date.getDate();
 const month = date.getMonth();
 const year = date.getFullYear();
 const weekDay = date.getDay();
+const millisekundenProTag = 1000 * 60 * 60 * 24; /* Converts ms into day */
 
 console.log(day);
 console.log(month);
@@ -17,27 +18,15 @@ const fullDate =
 console.log(fullDate);
 
 function berechneTagesnummer(date) {
-    const jahresanfang = new Date(
-        date.getFullYear(),
-        0,
-        1
-    );
-
-    const millisekundenProTag = 1000 * 60 * 60 * 24;
+    const jahresanfang = new Date(date.getFullYear(),0,1);
 
     return Math.floor(
-        (date - jahresanfang) / millisekundenProTag
-    ) + 1;
+        (date - jahresanfang) / millisekundenProTag) + 1;  /*+1 cause january first ist also counted as a full day */
 }
 
 function berechneTageUebrig(date) {
     const jahresende = new Date(
-        date.getFullYear() + 1,
-        0,
-        1
-    );
-
-    const millisekundenProTag = 1000 * 60 * 60 * 24;
+        date.getFullYear() + 1,0,1); /* same as above */
 
     return Math.floor(
         (jahresende - date) / millisekundenProTag
@@ -54,9 +43,6 @@ function berechneTageImMonat(year, month) {
 
     const ersterTagAktuellerMonat =
         new Date(year, month, 1);
-
-    const millisekundenProTag = 1000 * 60 * 60 * 24;
-
     return (
         (ersterTagNaechsterMonat - ersterTagAktuellerMonat)
         / millisekundenProTag
