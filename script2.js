@@ -5,12 +5,36 @@ const day = date.getDate();
 const month = date.getMonth();
 const year = date.getFullYear();
 const weekDay = date.getDay();
-const millisekundenProTag = 1000 * 60 * 60 * 24; /* Converts ms into day */
 
 console.log(day);
 console.log(month);
 console.log(year);
 console.log(weekDay);
+
+const baseURL = "https://history.muffinlabs.com/date";
+
+var apiURL = `${baseURL}/${month + 1}/${day}`;
+console.log(apiURL);
+
+function getAPIData() {
+    return fetch(apiURL)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`)
+            };
+
+            return response.json();
+        })
+        .then(data => {
+            console.log(data);
+
+            return data;
+            
+        })
+        .catch(error => {
+            console.error("Error fetching API data:", error);
+        });
+}
 
 const fullDate =
         `${String(day).padStart(2, '0')}.${String(month + 1).padStart(2, '0')}.${year}`;
@@ -18,15 +42,23 @@ const fullDate =
 console.log(fullDate);
 
 function berechneTagesnummer(date) {
-    const jahresanfang = new Date(date.getFullYear(),0,1);
+    const jahresanfang = new Date(
+        date.getFullYear(),0,1);
+
+    const millisekundenProTag = 1000 * 60 * 60 * 24;
 
     return Math.floor(
-        (date - jahresanfang) / millisekundenProTag) + 1;  /*+1 cause january first ist also counted as a full day */
+        (date - jahresanfang) / millisekundenProTag) + 1;
 }
 
 function berechneTageUebrig(date) {
     const jahresende = new Date(
-        date.getFullYear() + 1,0,1); /* same as above */
+        date.getFullYear() + 1,
+        0,
+        1
+    );
+
+    const millisekundenProTag = 1000 * 60 * 60 * 24;
 
     return Math.floor(
         (jahresende - date) / millisekundenProTag
@@ -43,6 +75,9 @@ function berechneTageImMonat(year, month) {
 
     const ersterTagAktuellerMonat =
         new Date(year, month, 1);
+
+    const millisekundenProTag = 1000 * 60 * 60 * 24;
+
     return (
         (ersterTagNaechsterMonat - ersterTagAktuellerMonat)
         / millisekundenProTag
@@ -103,6 +138,43 @@ document.getElementById("beschreibung").textContent =
     `hat insgesamt ${daysInMonth} Tage. ` +
     `Heute ist kein gesetzlicher Feiertag in Deutschland.`;
 
+document.getElementById("ereignisse-ueberschrift").textContent = 
+`Historische Ereignisse am ${day}. ${monat} ${year}`;
+
+function createHistoricEventsList(events) {
+    getAPIData()
+        .then(data => {
+          const events = data.data.Events;
+          const deaths = data.data.Deaths;
+          const births = data.data.Births;
+        
+        for (let i = 0; i < 2; i++) { 
+            const randomIndex = Math.floor(Math.random() * events.length);
+            const event = events[randomIndex];
+            const listItem = document.createElement("li");
+            listItem.textContent = `${event.year}: ${event.text}`;
+            document.querySelector(".ereignisseHistorisch").appendChild(listItem);
+        }   
+        for (let i = 0; i < 2; i++) { 
+            const randomIndex = Math.floor(Math.random() * deaths.length);
+            const death = deaths[randomIndex];
+            const listItem = document.createElement("li");
+            listItem.textContent = `${death.year}: ${death.text}`;
+            document.querySelector(".tode").appendChild(listItem);
+         
+        }
+        for (let i = 0; i < 2; i++) { 
+            const randomIndex = Math.floor(Math.random() * births.length);
+            const birth = births[randomIndex];
+            const listItem = document.createElement("li");
+            listItem.textContent = `${birth.year}: ${birth.text}`;
+            document.querySelector(".geburten").appendChild(listItem);
+        }       
+      }); 
+}
+
+createHistoricEventsList()
+
 function erstelleKalender(tabelle, year, month, daysInMonth) {
 
     const caption = tabelle.createCaption();
@@ -157,3 +229,11 @@ erstelleKalender(
     month,
     daysInMonth
 );
+
+const presentDayCell = document.querySelectorAll("#tabelle td");
+
+presentDayCell.forEach(zelle => {
+    if (zelle.textContent === String(day)) {
+        zelle.style.backgroundColor = "lightgreen";
+    }
+});
